@@ -27,7 +27,6 @@ requirements:
     - {{ stdlib('c') }}
     - cargo-bundle-licenses
 
-
   host:
     - python
     - setuptools >=77
@@ -47,6 +46,7 @@ test:
   requires:
     - pytest
     - hypothesis
+    - pip
   commands:
     - pip check
     - cbor2 --help
