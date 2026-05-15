@@ -1,0 +1,72 @@
+{% set name = "cbor2" %}
+{% set version = "6.1.1" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/cbor2-{{ version }}.tar.gz
+  sha256: 6f0644869e0fdcd6f3874330b8f1cebd009f33191de43acf609dc2409cd362c4
+
+build:
+  skip: true  # [py<310]
+  number: 0
+  entry_points:
+      - cbor2=cbor2.tool:main
+  script: 
+    - {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+    - cd rust
+    - cargo-bundle-licenses --format yaml --output {{ SRC_DIR }}/THIRDPARTY.yml
+    - cd ..
+
+requirements:
+  build:
+    - {{ compiler('rust') }}
+    - {{ compiler('c') }}
+    - {{ stdlib('c') }}
+    - cargo-bundle-licenses
+
+  host:
+    - python
+    - setuptools >=77
+    - setuptools-rust
+    - setuptools-scm >=6.4
+    - tomli
+    - pip
+
+  run:
+    - python
+
+test:
+  source_files:
+    - tests/
+  imports:
+    - cbor2
+  requires:
+    - pytest
+    - hypothesis
+    - pip
+  commands:
+    - pip check
+    - cbor2 --help
+    - pytest tests
+
+about:
+  home: https://github.com/agronholm/cbor2
+  summary: CBOR (de)serializer with extensive tag support
+  description: |
+    This library provides encoding and decoding for the Concise Binary Object
+    Representation (CBOR) (RFC 8949) serialization format. The specification
+    is fully compatible with the original RFC 7049.
+  license: MIT
+  license_file:
+    - LICENSE.txt
+    - THIRDPARTY.yml
+  license_family: MIT
+  doc_url: https://cbor2.readthedocs.io/
+  dev_url: https://github.com/agronholm/cbor2
+
+extra:
+    recipe-maintainers:
+    - thewchan
