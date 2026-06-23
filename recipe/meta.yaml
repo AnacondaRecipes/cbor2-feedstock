@@ -32,7 +32,7 @@ requirements:
     - setuptools >=77
     - setuptools-rust
     - setuptools-scm >=6.4
-    - tomli ==2.2.1  # Not a hard and fast requirement, just trying to quiet the linter
+    - tomli >=2.2.1  # Not a hard and fast requirement, just trying to quiet the linter
     - pip
 
   run:
